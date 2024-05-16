@@ -27,8 +27,10 @@ class _TransactionFormState extends State<TransactionForm> {
   void _submitData() {
     final enteredBeschreib = beschreibungsVal.text;
     final enteredMenge = double.tryParse(mengenVal.text);
-   
-   
+    if (enteredBeschreib.isEmpty || enteredMenge == null || selectedMonat == null) {
+      print("Missing inputs!");
+     return;  
+    }
 //Übergabe der werte an varSum funktion:
 //selected Monat daha eklenmedi....
 //varsum i transactiona yollamam lazim!

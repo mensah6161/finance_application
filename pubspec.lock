@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.18.0"
+  control_pad_plus:
+    dependency: "direct main"
+    description:
+      name: control_pad_plus
+      sha256: "4bcedcb2b473c53e7179d7d35afcacc0b6ccb4209b13dc300abe93bd862f2586"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.0"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -186,3 +194,4 @@ packages:
     version: "0.3.0"
 sdks:
   dart: ">=3.2.5 <4.0.0"
+  flutter: ">=1.17.0"
