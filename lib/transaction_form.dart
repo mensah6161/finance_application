@@ -17,8 +17,8 @@ class _TransactionFormState extends State<TransactionForm> {
   final mengenVal = TextEditingController();
   // Liste der Monate
   final List<String> monate = [
-    'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni',
-    'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'Dezember'
   ];
     //? damit es auch wert null annehmen kann oder late
  String? selectedMonat; 
