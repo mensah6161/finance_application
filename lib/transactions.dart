@@ -4,8 +4,6 @@ import 'transaction_form.dart';
 class Transactions extends StatefulWidget {
   const Transactions({super.key});
 
-//erstellen einer State Klasse, 
-//die die obere Klasse überschreibt, um State weiterzuegeben
   @override
  _TransactionsState createState() => _TransactionsState();
 }
@@ -21,8 +19,7 @@ class NewTextStyle {
 
 class _TransactionsState extends State<Transactions> 
 {
-//Liste kaydi, kullanici inputlari icin
-//C-Lang struct in flutter - map! 
+//List for user inputs 
 final List<Map<String, dynamic>> _userTransactions =[];
 
 void _startAddNewTransaction (BuildContext context){
@@ -31,20 +28,20 @@ showModalBottomSheet(
   builder: (_){
   return GestureDetector(
           onTap: () {},
-          //Tippen unabh. aller Grenzen werden erkannt
+          //opaque- hinders cklick on background widgets
           behavior: HitTestBehavior.opaque,
-          //ich übergebe varSum and 
+          //Handing over “varsum” to calculate the sum at the end
           child: TransactionForm(varSum: _addNewTransaction),
         );
       },
   );
 }
-
+//every new userinput -> leads to new "neuEintrag" -coming from formular
 void _addNewTransaction(String descr, double menge, String monat){
 final neuEintrag={
   'beschreibung': descr,
   'menge':menge,
-  'datum':monat,
+  'monat':monat,
 };
 
  setState(() {
@@ -52,10 +49,24 @@ final neuEintrag={
     });
   }
 
-
-
 @override
 Widget build(BuildContext context) {
+  // new List for my groupedtransactions -> divided by months
+  // first - check if there is the current month existing in my list (no null!)
+  // then adding it into my groupT-list from my old _userTransaction -list
+  // if the month is not exisiting, we create new List for current month
+  //for me: meine map enthält die verschiedenen Listen, die Listen haben die Monatsnamen als Keys
+    Map<String, List<Map<String, dynamic>>> groupedTransactions = {};
+    for (var transaction in _userTransactions) {
+      String month = transaction['monat'];
+      if (groupedTransactions.containsKey(month)) {
+        groupedTransactions[month]!.add(transaction);
+      } else {
+        groupedTransactions[month] = [transaction];
+      }
+    }
+
+    List<String> months = groupedTransactions.keys.toList();
   return Scaffold(
     appBar: AppBar(
       title: const Text('Transaktionen'),
@@ -71,9 +82,28 @@ Widget build(BuildContext context) {
       padding: const EdgeInsets.all(20),
       child: _userTransactions.isNotEmpty
           ? ListView.builder(
-              itemCount: _userTransactions.length,
-              itemBuilder: (context, index) {
-                bool isPositive = _userTransactions[index]['menge'] >= 0;
+            //für jeden Monat wird ein column widget erstellt
+            //mit verschiendnen kindderwidgets
+              itemCount: months.length,
+              itemBuilder: (context, monthIndex) {
+                 String month = months[monthIndex];
+                  List<Map<String, dynamic>> transactions = groupedTransactions[month]!;
+                  return Column(crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Text(month,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,
+          ),
+          ),
+),
+
+//for me:Spread Operator übernimmt meine Transaktionen liste und entpackt sie einzeln
+// im column - so als würde man sie hier selbste inzeln codiren....
+...transactions.map((transaction) {
+   bool isPositive = transaction['menge'] >= 0;
+
+                     
+               // bool isPositive = _userTransactions[index]['menge'] >= 0;
                 return Container(
                   width: 300,
                   height: 60,
@@ -98,14 +128,14 @@ Widget build(BuildContext context) {
                           ), 
                         child: Center(
                           child: Text(
-                          ' ${_userTransactions[index]['menge']}',
+                          ' ${transaction['menge']}',
                           style: NewTextStyle.arialBlack10Bold.copyWith(color:Colors.white)
                           ),
                       ), 
                       ),
                       Container(
                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(' ${_userTransactions[index]['beschreibung']}',
+                        child: Text(' ${transaction['beschreibung']}',
                          style: NewTextStyle.arialBlack10Bold,
                         ),
                       ),
@@ -114,7 +144,11 @@ Widget build(BuildContext context) {
                 ),
                 );
               },
-            )
+            ).toList(),
+                    ],
+                  );
+                },
+              )
           : const Center(
               child: Text('Keine Transaktionen'),
             ),
