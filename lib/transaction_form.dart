@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 
+  // List of months in right order - global to use in other file
+  final List<String> monthsInorder = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'Dezember'
+  ];
+
 //Stafeul - cuz state changes while entering content
 class TransactionForm extends StatefulWidget {
   // 
@@ -15,11 +21,7 @@ class _TransactionFormState extends State<TransactionForm> {
   //zwei eingabe felder
   final beschreibungsVal = TextEditingController();
   final mengenVal = TextEditingController();
-  // Liste der Monate
-  final List<String> monate = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'Dezember'
-  ];
+
     //? damit es auch wert null annehmen kann oder late
  String? selectedMonat; 
 
@@ -74,7 +76,7 @@ class _TransactionFormState extends State<TransactionForm> {
                 value: selectedMonat,
                 hint: const Text('Monat auswählen'),
                 isExpanded: true,
-                items: monate.map((String value) {
+                items: monthsInorder.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),

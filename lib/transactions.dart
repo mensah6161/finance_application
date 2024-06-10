@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'transaction_form.dart';
 
+
 class Transactions extends StatefulWidget {
   const Transactions({super.key});
 
@@ -21,6 +22,17 @@ class _TransactionsState extends State<Transactions>
 {
 //List for user inputs 
 final List<Map<String, dynamic>> _userTransactions =[];
+
+//Map -> one sumVariable for each month i have 
+final Map<String, double> _sumTransactionsMonth ={};
+
+void _deleteTransaction(String beschreibung, double menge){
+  setState((){
+    _userTransactions.removeWhere((transaction)=> 
+      transaction['beschreibung'] == beschreibung && transaction['menge']==menge);
+
+  });
+}
 
 void _startAddNewTransaction (BuildContext context){
 showModalBottomSheet(
@@ -44,10 +56,19 @@ final neuEintrag={
   'monat':monat,
 };
 
+
  setState(() {
       _userTransactions.add(neuEintrag);
+
+      if (_sumTransactionsMonth.containsKey(monat)){
+        _sumTransactionsMonth[monat] = _sumTransactionsMonth[monat]! + menge;
+      } else {
+        _sumTransactionsMonth[monat] = menge;
+      }
     });
   }
+
+
 
 @override
 Widget build(BuildContext context) {
@@ -67,6 +88,7 @@ Widget build(BuildContext context) {
     }
 
     List<String> months = groupedTransactions.keys.toList();
+    months.sort((a, b)=> monthsInorder.indexOf(a).compareTo(monthsInorder.indexOf(b)));
   return Scaffold(
     appBar: AppBar(
       title: const Text('Transaktionen'),
@@ -88,23 +110,49 @@ Widget build(BuildContext context) {
               itemBuilder: (context, monthIndex) {
                  String month = months[monthIndex];
                   List<Map<String, dynamic>> transactions = groupedTransactions[month]!;
+                  
+                  double currentSumMonth= _sumTransactionsMonth[month] ?? 0.0; 
                   return Column(crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
           padding: const EdgeInsets.symmetric(vertical: 10),
-          child: Text(month,style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,
+          child: Text('$month - Summe : $currentSumMonth',
+          style: const TextStyle(fontSize: 18,fontWeight: FontWeight.bold,
           ),
           ),
 ),
 
 //for me:Spread Operator übernimmt meine Transaktionen liste und entpackt sie einzeln
 // im column - so als würde man sie hier selbste inzeln codiren....
-...transactions.map((transaction) {
+...transactions.asMap().entries.map((entry) {
+    int transactionIndex=entry.key;
+    Map <String, dynamic> transaction= entry.value;
    bool isPositive = transaction['menge'] >= 0;
 
                      
                // bool isPositive = _userTransactions[index]['menge'] >= 0;
-                return Container(
+                return Dismissible(
+                  //key to identify my widget
+                  key: Key(transaction['beschreibung']+ transaction['menge'].toString()),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction){
+                    //set new state! see top
+                    _deleteTransaction(transaction['beschreibung'],transaction['menge']);
+                  //  ScaffoldMessenger.of(context)
+                    //.showSnackBar(SnackBar(content: Text('$transactionIndex deleted')));
+                  },
+                  background: Container(
+                    color: Colors.red,
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                  
+               
+                  child: Container(
                   width: 300,
                   height: 60,
                   decoration : BoxDecoration(
@@ -142,8 +190,9 @@ Widget build(BuildContext context) {
                     ],
                   ),
                 ),
+                ),
                 );
-              },
+              }
             ).toList(),
                     ],
                   );
