@@ -26,11 +26,15 @@ final List<Map<String, dynamic>> _userTransactions =[];
 //Map -> one sumVariable for each month i have 
 final Map<String, double> _sumTransactionsMonth ={};
 
-void _deleteTransaction(String beschreibung, double menge){
+void _deleteTransaction(String beschreibung, double menge, String monat){
   setState((){
     _userTransactions.removeWhere((transaction)=> 
       transaction['beschreibung'] == beschreibung && transaction['menge']==menge);
-
+     
+    if(_sumTransactionsMonth.containsKey(monat)){
+      _sumTransactionsMonth[monat]= _sumTransactionsMonth[monat]! -menge;
+    }
+ 
   });
 }
 
@@ -137,7 +141,7 @@ Widget build(BuildContext context) {
                   direction: DismissDirection.endToStart,
                   onDismissed: (direction){
                     //set new state! see top
-                    _deleteTransaction(transaction['beschreibung'],transaction['menge']);
+                    _deleteTransaction(transaction['beschreibung'],transaction['menge'], transaction['monat'],);
                   //  ScaffoldMessenger.of(context)
                     //.showSnackBar(SnackBar(content: Text('$transactionIndex deleted')));
                   },

@@ -1,16 +1,25 @@
-# my_finance_app
+# FinanceApp
 
-A new Flutter project.
+![Titelbild](./Screenshots/Titelbild_letzteVersion_Der_App)
 
-## Getting Started
+## Übersicht
 
-This project is a starting point for a Flutter application.
+Die FinanceApp ist eine Anwendung, mit der Benutzer Transaktionen hinzufügen, nach Monaten und Beträgen sortieren und schön darstellen können. Die App umfasst verschiedene Seiten für Dashboard, Transaktionen und Sparziele.
 
-A few resources to get you started if this is your first Flutter project:
+## Funktionen
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Dashboard**: Übersicht über die wichtigsten Informationen und Willkommensnachricht.
+- **Transaktionen**: Hinzufügen, Anzeigen und Löschen von Transaktionen, die nach Monaten und Werten geordnet sind.
+- **Sparziele**: Setzen und Verfolgen von Sparzielen.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+## Projektstruktur
+
+- **main.dart**: Hauptdatei, die die App initialisiert und die Navigation zwischen den Seiten ermöglicht.
+- **dashboard.dart**: Enthält die Benutzeroberfläche für das Dashboard.
+- **transactions.dart**: Verwaltung und Anzeige der Transaktionen.
+- **transaction_form.dart**: Formular zum Hinzufügen neuer Transaktionen.
+- **goal.dart**: Enthält die Benutzeroberfläche für Sparziele.
+- **Screenshots**: Ordner mit Screenshots der App und des Figma-Projektplans.
+
+
