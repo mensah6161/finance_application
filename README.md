@@ -1,6 +1,7 @@
 # FinanceApp
 
-![Titelbild](./Screenshots/Titelbild_letzteVersion_Der_App)
+![Titelbild](./lib/Screenshots/Titelbild_letzteVersion_Der_App.png)
+
 
 ## Übersicht
 
